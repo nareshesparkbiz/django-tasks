@@ -1,0 +1,223 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+    crossorigin="anonymous"
+  />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"
+  ></script>
+    <title>View Data</title>
+
+
+    <style>
+        .styled-table {
+            width: 80%;
+    border-collapse: collapse;
+    margin: 25px auto;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+    </style>
+</head>
+<body>
+    
+   
+
+    <div >
+        <h1 style="text-align: center;">Data Table</h1>
+        <table  class="styled-table" id="show-data-table">
+            <thead>
+
+                <tr >
+                    <th onclick="changePage(id=1,ajax=0,sort='firstname')">First Name</th>
+                    <th  onclick="changePage(id=1,ajax=0,sort='lastname')">Last Name</th>
+                    <th  onclick="changePage(id=1,ajax=0,sort='designation1')"> Designation</th>
+                  
+                    <th  onclick="changePage(id=1,ajax=0,sort='email')">Email</th>
+                    <th  onclick="changePage(id=1,ajax=0,sort='state')">State</th>
+                    <th  onclick="changePage(id=1,ajax=0,sort='city')">City</th>
+                    <th  onclick="changePage(id=1,ajax=0,sort='dob')">Date of Birth</th>
+                    <th  onclick="changePage(id=1,ajax=0,sort='gender')">Gender</th>
+                    <th >Delete</th>
+                    <th >Edit</th>
+
+                    
+    
+                   
+    
+                </tr>
+            </thead>
+            <tbody>
+            {% for i in data %}
+            <tr >
+             
+            
+                <td>{{i.firstname}}</td>
+                <td>{{i.lastname}}</td>
+                <td>{{i.designation1}}</td>
+
+                <td>{{i.email}}</td>
+                <td>{{i.state}}</td>
+                <td>{{i.city}}</td>
+                <td>{{i.dob}}</td>
+                <td>{{i.gender}}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" id="{{i.id}}" data-placement="top" title="Delete" onclick="deleteData(this.id)"><i class="fa fa-trash"></i></button></td>
+                <td>   <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button></td>
+
+
+                
+            
+
+
+            
+            </tr>
+                {% endfor %}
+            </tbody>
+        
+          </table>
+
+
+          <div class="container d-flex align-items-center justify-content-center">
+            <nav aria-label="Page navigation 
+            function delete(this){
+    
+            }
+        example">
+                <ul class="pagination">
+                    {% for i in range%}
+                  <li class="page-item"><a class="page-link" id="{{i}}" onclick="changePage(this.id,ajax=0,sort='id')">{{i}}</a></li>
+
+                  {% endfor %}
+                </ul>
+              </nav>
+          </div>
+      
+    </div>
+
+
+
+    <script>
+         async function changePage(id,ajax,sort) {
+           
+            pageId=id;
+            let pageData= await fetch(`http://127.0.0.1:5000/show-Data/?pageId=${pageId}&ajax=${ajax}&sort=${sort}`);
+
+            let data= await pageData.json()
+            // console.log( data['all_data'],"=================================")
+
+           let s1=`
+            
+            <thead>
+
+                <tr >
+                    <th onclick="changePage(id=1,ajax=0,sort='firstname')">First Name</th>
+                    <th  onclick="changePage(id=1,ajax=0,sort='lastname')">Last Name</th>
+                    <th  onclick="changePage(id=1,ajax=0,sort='designation1')"> Designation</th>
+                  
+                    <th  onclick="changePage(id=1,ajax=0,sort='email')">Email</th>
+                    <th  onclick="changePage(id=1,ajax=0,sort='state')">State</th>
+                    <th  onclick="changePage(id=1,ajax=0,sort='city')">City</th>
+                    <th  onclick="changePage(id=1,ajax=0,sort='dob')">Date of Birth</th>
+                    <th  onclick="changePage(id=1,ajax=0,sort='gender')">Gender</th>
+                    <th >Delete</th>
+                    <th >Edit</th>
+
+                    
+    
+                   
+    
+                </tr>
+            </thead>
+            <tbody>`
+        
+        
+            for( i in  data['all_data']){
+                console.log(i)
+                
+s1+=`
+<tr >
+             
+            
+             <td>${ data['all_data'][i].firstname}</td>
+             <td>${ data['all_data'][i].lastname}</td>
+             <td>${ data['all_data'][i].designation1}</td>
+
+             <td>${ data['all_data'][i].email}</td>
+             <td>${ data['all_data'][i].state}</td>
+             <td>${ data['all_data'][i].city}</td>
+             <td>${ data['all_data'][i].dob}</td>
+             <td>${ data['all_data'][i].gender}</td>
+             <td>
+                 <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete" id=${data['all_data'][i].id} onclick="deleteData(this.id)"><i class="fa fa-trash"></i></button></td>
+
+             <td>   <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button></td>
+
+
+             
+         
+
+
+         
+         </tr>
+
+`
+            } 
+          
+        s1+=`</tbody>`
+    
+        let table1=document.getElementById("show-data-table")
+        // console.log(table1)
+        table1.innerHTML = s1
+
+        }
+    
+
+      async  function deleteData(id){
+            console.log(id)
+
+            if(confirm("Are you sure you want to delete this record?")){
+              await  fetch(`http://127.0.0.1:5000/delete-Data/?id=${id}`)
+            }
+        }
+
+    </script>
+</body>
+</html>
