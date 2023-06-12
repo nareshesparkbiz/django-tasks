@@ -113,10 +113,16 @@ class Languages(models.Model):
     write_status=models.BooleanField()
     speak_status=models.BooleanField()
 
+    def __str__(self):
+        return self.language
+
 class Technologies(models.Model):
     student_id = models.ForeignKey(BasicDetails, on_delete=models.CASCADE)
     tech_name = models.CharField(max_length=100)
     star=models.CharField(max_length=100)
+
+    def __str__(self):
+       return self.tech_name
 
 class RefranceContact(models.Model):
     student_id = models.ForeignKey(BasicDetails, on_delete=models.CASCADE)

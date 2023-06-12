@@ -1,3 +1,4 @@
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -16,44 +17,19 @@
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"
   ></script>
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <title>View Data</title>
-
+    {%load static %}
+    <link rel="stylesheet" href="{% static 'css/table.css'%}">
 
     <style>
-        .styled-table {
-            width: 80%;
-    border-collapse: collapse;
-    margin: 25px auto;
-    font-size: 0.9em;
-    font-family: sans-serif;
-    min-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+ 
+
+.search-container{
+    display: inline-block;
+  align-self: flex-end;
+
 }
-
-.styled-table thead tr {
-    background-color: #009879;
-    color: #ffffff;
-    text-align: left;
-}
-
-.styled-table th,
-.styled-table td {
-    padding: 12px 15px;
-}
-
-
-.styled-table tbody tr {
-    border-bottom: 1px solid #dddddd;
-}
-
-.styled-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
-}
-
-.styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #009879;
-}
-
     </style>
 </head>
 <body>
@@ -62,10 +38,27 @@
 
     <div >
         <h1 style="text-align: center;">Data Table</h1>
+    
+        <div class="search-container">
+            <div class="input-group rounded">
+                <form action="{% url 'searchData' %}" method="GET" >
+                    <div  class="d-flex p-2">
+                        
+                        <input type="search" class="form-control rounded"  name="search" id="search-content" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                        <button type="submit"  class="input-group-text border-0" id="search-addon" >
+                          <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+            </form>
+              </div>
+            </div>
+
+
         <table  class="styled-table" id="show-data-table">
             <thead>
 
                 <tr >
+                    <th  onclick="changePage(id=1,ajax=0,sort='id')">Id</th>
                     <th onclick="changePage(id=1,ajax=0,sort='firstname')">First Name</th>
                     <th  onclick="changePage(id=1,ajax=0,sort='lastname')">Last Name</th>
                     <th  onclick="changePage(id=1,ajax=0,sort='designation1')"> Designation</th>
@@ -88,7 +81,7 @@
             {% for i in data %}
             <tr >
              
-            
+                <td>{{i.id}}</td>
                 <td>{{i.firstname}}</td>
                 <td>{{i.lastname}}</td>
                 <td>{{i.designation1}}</td>
@@ -100,7 +93,9 @@
                 <td>{{i.gender}}</td>
                 <td>
                     <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" id="{{i.id}}" data-placement="top" title="Delete" onclick="deleteData(this.id)"><i class="fa fa-trash"></i></button></td>
-                <td>   <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button></td>
+                <td>  <a href="{% url 'form-edit' i.id %}"> <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                </a>
+                </td>
 
 
                 
@@ -123,9 +118,9 @@
         example">
                 <ul class="pagination">
                     {% for i in range%}
-                  <li class="page-item"><a class="page-link" id="{{i}}" onclick="changePage(this.id,ajax=0,sort='id')">{{i}}</a></li>
+                    <li class="page-item"><a class="page-link" id="{{i}}" onclick="changePage(this.id,ajax=0,sort='id')">{{i}}</a></li>
+                    {% endfor %}
 
-                  {% endfor %}
                 </ul>
               </nav>
           </div>
@@ -136,6 +131,7 @@
 
     <script>
          async function changePage(id,ajax,sort) {
+            console.log("data")
            
             pageId=id;
             let pageData= await fetch(`http://127.0.0.1:5000/show-Data/?pageId=${pageId}&ajax=${ajax}&sort=${sort}`);
@@ -148,6 +144,7 @@
             <thead>
 
                 <tr >
+                    <th  onclick="changePage(id=1,ajax=0,sort='id')">Id</th>
                     <th onclick="changePage(id=1,ajax=0,sort='firstname')">First Name</th>
                     <th  onclick="changePage(id=1,ajax=0,sort='lastname')">Last Name</th>
                     <th  onclick="changePage(id=1,ajax=0,sort='designation1')"> Designation</th>
@@ -171,10 +168,12 @@
         
             for( i in  data['all_data']){
                 console.log(i)
+                var id1=data['all_data'][i]['id']
                 
 s1+=`
 <tr >
              
+    <td>${ data['all_data'][i].id}</td>
             
              <td>${ data['all_data'][i].firstname}</td>
              <td>${ data['all_data'][i].lastname}</td>
@@ -188,12 +187,9 @@ s1+=`
              <td>
                  <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete" id=${data['all_data'][i].id} onclick="deleteData(this.id)"><i class="fa fa-trash"></i></button></td>
 
-             <td>   <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button></td>
-
-
-             
-         
-
+                 <td>  <a  href="{% url 'form-edit' 188 %}" > <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                </a>
+                </td>
 
          
          </tr>
@@ -218,6 +214,17 @@ s1+=`
             }
         }
 
+
+        async function searchBar(x){
+            // console.log("Searching",x.value)
+
+            let data=document.getElementById("search-content").value
+            console.log("Searching",data)
+
+
+            await fetch(`http://127.0.0.1:5000/search/?search=${data}`)
+
+        }
     </script>
 </body>
 </html>

@@ -2,6 +2,7 @@ from django import forms
 from .models import BasicDetails,StateMaster,CityMaster,EducationDetail,OptionMaster,WorkExperiences,LanguageMaster,Languages,Technologies,RefranceContact,Preference
 
 class BasicDetailForm(forms.ModelForm):
+   #  dob = forms.DateField(widget=forms.DateInput(format='%d/%m%Y'))
     class Meta:
       
       model=BasicDetails
@@ -9,6 +10,7 @@ class BasicDetailForm(forms.ModelForm):
       labels={
          'designation1':'Designation',
       }
+     
       
       widgets = {
             'firstname': forms.TextInput(attrs={'placeholder': 'Enter First Name'}),
@@ -19,10 +21,11 @@ class BasicDetailForm(forms.ModelForm):
              'address2': forms.TextInput(attrs={'placeholder': 'Address 2'}),
              'email': forms.TextInput(attrs={'placeholder': ' Enter Email'}),
              'zipcode': forms.TextInput(attrs={'placeholder': 'Pincode'}),
-           'dob': forms.DateInput(format=('%m/%d/%Y'), attrs={ 'placeholder':'Select a date', 'type':'date'}),
+             'dob': forms.DateInput( attrs={ 'placeholder':'Select a date', 'type':'date'}),
+          
              
              'city':forms.Select(),
-             'state':forms.Select( attrs={'onchange' : "changeState(this.value);"}),
+             'state':forms.Select( attrs={'onchange' : "changeState(this.value)",}),
              'course_name':forms.Select()
  
 

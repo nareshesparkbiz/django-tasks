@@ -17,6 +17,7 @@
     <title>Document</title>
   </head>
   <body>
+    <h2 class="text-center border-bottom bg-light">{% if id %} Edit {% else %} New {% endif %} Job Form</h2>
     <div class="container" style="margin-top: 3rem;max-width: 100%;">
       <form action="{%url 'Basic'%}" method="POST">
         {% csrf_token %}
@@ -70,10 +71,90 @@
           </table>
         </fieldset>
 
+
+
+
         <fieldset class="form-group border p-3">
           <legend class="w-auto px-2">Academic Details</legend>
 
+
+
           <table class="table table-striped" id="education-table">
+
+            {% if id %}
+
+            {% for i in academicData %}
+
+            <tr>
+              <th><label for="id_course_name">Course Name </label></th>
+              <td><select name="course" id="id_course_name{{forloop.counter }}">
+                <option value="">Select Course</option>
+                {% for j in courseData %}
+                
+                
+                {% if i.course_name == j %}
+                
+                          <option value="{{j}}" selected>
+                              {{j}}
+                              </option>
+                              {% endif %}
+
+                              {% if i.course_name != j %}
+                              <option value="{{j}}">
+                                {{j}}
+                            </option>
+
+                              {% endif %}
+
+                          {% endfor %}
+                  </select></td>
+
+                  <td></td>
+
+
+
+              <th><label for="{{i.board_name}}"><b>Board name</b></label></th>
+              <td><input type="text" name="board_name" id="id_board_name{{forloop.counter }}" value="{{i.board_name}}"></td>
+
+              </tr>
+              <tr>
+                
+                <th><label for="id_passing_year"><b>Passing year</b></label></th>
+                <td><input type="text" name="passing_year" id="id_passing_year{{forloop.counter }}"  value="{{i.passing_year}}"></td>
+                <td></td>
+                <td><label for="id_percentge"><b>Percentage</b></label></td>
+                <td><input type="text" name="percentage" id="id_percentage{{forloop.counter }}"  value="{{i.percentage}}" ></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>
+                  <input
+                    type="button"
+                    id="plusButton1"
+                    value="Add"
+                    onclick="naresh_click(flag=1)"
+                  />
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                  <input
+                    type="button"
+                    id="minusButton1"
+                    value="Remove"
+                    onclick="naresh_click(flag=0)"
+                    disabled
+                  />
+                </td>
+              </tr>
+            
+
+
+            {% endfor %}
+          
+
+
+            {% else %}
             <tr>
               <th>{{education.course_name.label_tag}}</th>
               <td>{{education.course_name}}</td>
@@ -111,13 +192,66 @@
                 />
               </td>
             </tr>
+
+
+            {% endif %}
           </table>
         </fieldset>
+
+
 
         <fieldset class="form-group border p-3">
           <legend class="w-auto px-2">Work Experiences</legend>
 
           <table class="table table-striped" id="work-table">
+
+              {% if id %}
+
+              {% for i in workData %}
+
+            <tr>
+              <th><label for="id_company_name"><b>Company name</b></label></th>
+              <td><input type="text" name="company_name" id="id_company_name{{forloop.counter }}" value="{{i.company_name}}"></td>
+              <td></td>
+              <th><label for="id_designation"><b>Designation</b></label></th>
+              <td><input type="text" name="designation" id="id_designation{{forloop.counter }}" value="{{i.designation}}"></td>
+
+            </tr>
+
+            <tr>
+              <th><label for="id_start_date"><b>Start Date</b></label></th>
+                        <td><input type="date" name="start_date" id="id_start_date{{forloop.counter }}" value= "{{i.start_date}}"></td>
+                        <td></td>
+                        <th><label for="id_end_date"><b>End Date</b></label></th>
+                        <td><input type="date" name="end_date" id="id_end_date{{ forloop.counter }}"  value= "{{i.end_date}}"></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                <input
+                  type="button"
+                  id="plusButton2"
+                  value="Add"
+                  onclick="work(flag=1)"
+                />
+              </td>
+              <td></td>
+              <td></td>
+              <td>
+                <input
+                  type="button"
+                  id="minusButton2"
+                  value="Remove"
+                  onclick="work(flag=0)"
+                  disabled
+                />
+              </td>
+            </tr>
+              {% endfor %}
+
+            {% else %}
+
+                
             <tr>
               <th>{{work_part.company_name.label_tag}}</th>
               <td>{{work_part.company_name}}</td>
@@ -155,6 +289,12 @@
                 />
               </td>
             </tr>
+
+            {% endif %}
+
+
+
+
           </table>
         </fieldset>
 
@@ -164,6 +304,123 @@
          <fieldset class="form-group border p-3">
             <legend class="w-auto px-2">Language</legend>
             <table class="table table-striped">
+             
+
+              {% if id %}
+      
+
+              {% for j in languageData%}
+       
+           
+         
+
+            
+              {% for i in userlang%}
+           
+              
+            
+              <tr>
+        
+                {% if j.language == i %}
+           
+               
+                   
+                <td><input type="checkbox"  name="language" id="language{{i.id}}" value="{{i}}"  class="language" onclick="check_validate_lan(this)" checked >
+
+                  <label for="{{i}}">{{i}}</label></td>
+                  
+             {% if j.read_status %}
+                 
+                 
+       
+                <td><input type="checkbox" name="read_status" value="{{i}}" id="{{i}}1"  class="{{i}}" checked>
+                  <label for="read">Read</label>
+                  </td>
+                  {% else %}
+
+                  <td><input type="checkbox" name="read_status" value="{{i}}" id="{{i}}1"  class="{{i}}" >
+                    <label for="read">Read</label>
+                    </td>
+
+                  {% endif %}
+
+                  {% if j.write_status %}
+                
+                <td><input type="checkbox" name="write_status" value="{{i}}" id="{{i}}2" class="{{i}}" checked>
+                <label for="write">Write</label>
+                </td>
+
+                {% else %}
+
+                <td><input type="checkbox" name="write_status" value="{{i}}" id="{{i}}2" class="{{i}}" >
+                  <label for="write">Write</label>
+                  </td>
+                {% endif %}
+
+                {% if j.speak_status %}
+
+
+                <td><input type="checkbox" name="speak_status" value="{{i}}" id="{{i}}3" class="{{i}}" checked> 
+                  <label for="speak">Speak
+                  </label>
+                  </td>
+
+                  {% else %}
+
+                <td><input type="checkbox" name="speak_status" value="{{i}}" id="{{i}}3" class="{{i}}" > 
+                  <label for="speak">Speak
+                  </label>
+                  </td>
+                 
+      
+                  {% endif %}
+
+                 
+                  {% endif %}
+              </tr>
+
+          
+
+            
+
+
+          
+             
+              {% endfor %}
+              {% endfor %}
+
+              {%  for k in userlang %}
+
+                {% if k in langlist %}
+                {% else %}
+                <tr>
+
+                  <td><input type="checkbox"  name="language" id="language{{k.id}}" value="{{k}}"  class="language" onclick="check_validate_lan(this)"  >
+                    <label for="{{k}}">{{k}}</label></td>
+                    <td><input type="checkbox" name="read_status" value="{{k}}" id="{{k}}1"  class="{{k}}" >
+                      <label for="read">Read</label>
+                      </td>
+                      <td><input type="checkbox" name="write_status" value="{{k}}" id="{{k}}2" class="{{k}}">
+                        <label for="write">Write</label>
+                        </td>
+                        <td><input type="checkbox" name="speak_status" value="{{k}}" id="{{k}}3" class="{{k}}" > %
+                          <label for="speak">Speak
+                          </label>
+                          </td>
+
+                </tr>
+
+                {% endif %}
+              {% endfor %}
+
+             
+
+               
+           
+
+
+
+              {% else %}
               {% for i in userlang%}
         
               <tr>
@@ -186,13 +443,184 @@
 
               </tr>
                {% endfor %}
+
+               {% endif%}
         
+
+
+
               </table>
 
               
               <legend class="w-auto px-2">Technology</legend>
               <table class="table table-striped">
+
+                {% if id %}
+
+                {% for tech in technologyData %}
                 {% for element in usertech%}
+
+
+                
+
+
+                <tr>
+                  {% if tech.tech_name == element %}
+                  <td>
+                    <input type="checkbox" name="tech_name" id="techlang{{element.id}}" class="technology"
+                        value='{{element}}' oninput="allValidate()"
+                        onclick="check_validate_tech(this)"  checked/>
+
+                    <label for="{{element}}">{{element}}</label>
+                  </td>
+
+                  {% if tech.star == 'Beginner' %}
+
+                  <td>
+                    
+                    <input type="radio"
+                        name='{{element}}'
+                        id='{{element}}1' class="techLang"
+                        value="Beginner"  oninput="allValidate()" checked>
+               
+                    <label
+                        for="{{element}}">Beginner</label>
+                </td>
+                {% else %}
+                <td>
+                    
+                  <input type="radio"
+                      name='{{element}}'
+                      id='{{element}}1' class="techLang"
+                      value="Beginner"  oninput="allValidate()" >
+             
+                  <label
+                      for="{{element}}">Beginner</label>
+              </td>
+              {% endif %}
+              
+
+
+                <td>
+                  {% if tech.star == 'Mediator' %}
+
+                    <input type="radio"
+                        name='{{element}}'
+                        id='{{element}}2' class="techLang"
+                        value="Mediator" oninput="allValidate()"  checked >
+                    
+                  {% else %}
+                  <input type="radio"
+                  name='{{element}}'
+                  id='{{element}}2' class="techLang"
+                  value="Mediator" oninput="allValidate()"  >
+
+                  {% endif %}
+                
+                    <label
+                        for="{{element}}">Mediator</label>
+                </td>
+
+
+                <td>
+                  {% if tech.star == 'Expert' %}
+
+                    <input type="radio"
+                        name="{{element}}"
+                        id='{{element}}3'  class="techLang"
+                        value="Expert" oninput="allValidate()" checked>
+
+                        {% else %}
+                        <input type="radio"
+                        name="{{element}}"
+                        id='{{element}}3'  class="techLang"
+                        value="Expert" oninput="allValidate()">
+
+
+                        {% endif %}
+               
+                    <label
+                        for="{{element.name}}">Expert</label>
+                </td>
+
+
+                {% endif %}
+                </tr>
+                {% endfor %}
+                {% endfor %}
+
+
+
+
+                {% for techelement in usertech %}
+
+                {% if techelement in techlist %}
+                {% else %}
+                  <tr>
+                    <td>
+                      <input type="checkbox" name="tech_name" id="techlang{{techelement.id}}" class="technology"
+                          value='{{techelement}}' oninput="allValidate()"
+                          onclick="check_validate_tech(this)"  />
+  
+                      <label for="{{techelement}}">{{techelement}}</label>
+                    </td>
+
+                    <td>
+                    
+                      <input type="radio"
+                          name='{{techelement}}'
+                          id='{{techelement}}1' class="techLang"
+                          value="Beginner"  oninput="allValidate()" >
+                 
+                      <label
+                          for="{{techelement}}">Beginner</label>
+                  </td>
+
+                  <td>
+                  
+  
+                     
+                    <input type="radio"
+                    name='{{techelement}}'
+                    id='{{techelement}}2' class="techLang"
+                    value="Mediator" oninput="allValidate()"  >
+  
+                  
+                      <label
+                          for="{{techelement}}">Mediator</label>
+                  </td>
+
+                  <td>
+                  
+  
+                     
+                    <input type="radio"
+                    name='{{techelement}}'
+                    id='{{techelement}}3' class="techLang"
+                    value="Expert" oninput="allValidate()"  >
+  
+                  
+                      <label
+                          for="{{techelement}}">Expert</label>
+                  </td>
+
+
+
+
+                  </tr>
+
+                {% endif %}
+                {% endfor %}
+
+
+
+
+                {% else %}
+
+
+                {% for element in usertech%}
+
+
                 <tr>
                   <td>
                     <input type="checkbox" name="tech_name" id="techlang{{element.id}}" class="technology"
@@ -235,6 +663,8 @@
 
                 </tr>
                 {% endfor %}
+
+                {% endif %}
               </table>
         
           </fieldset> 
@@ -244,6 +674,27 @@
             <legend class="w-auto px-2">Refrances Contact</legend>
   
             <table class="table table-striped" id="ref-table">
+
+
+              {% if id %}
+              {% for i in refranceData %}
+              <tr>
+                <th><label for="id_ref_name"><b>Name</b></label></th>
+                <td><input type="text " name="rname<%=i+1%>" id="rname<%=i+1%>"  value= "<%=data2['refrances'][y]['ref_name']%>"></td>
+                <td><label for="rcont<%=i+1%>"><b>Contact </b></label></td>
+                <td><input type="text" name="rcont<%=i+1%>" id="rcont<%=i+1%>"  value= "<%=data2['refrances'][y]['ref_contact']%>"></td>
+                <td><label for="rel<%=i+1%>"><b>Relation </b></label></td>
+                <td><input type="text " name="rel<%=i+1%>" id="rel<%=i+1%>"  value= "<%=data2['refrances'][y]['relation']%>"></td>
+             
+            </tr>
+
+
+              {% endfor %}
+
+
+             
+
+              {% else %}
               <tr>
                 <th>{{refrances.ref_name.label_tag}}</th>
                 <td>{{refrances.ref_name}}</td>
@@ -275,6 +726,7 @@
                   />
                 </td>
               </tr>
+              {% endif %}
             </table>
           </fieldset>
 
@@ -329,11 +781,16 @@
     <script>
         var clk=2
       async function changeState(state) {
-        let data = await fetch(`get/${state}`);
+        console.log(state,"state")
+        let data = await fetch(`http://127.0.0.1:5000/get/${state}`);
         let a = await data.json();
 
         document.getElementById("id_city").innerHTML = a.city;
       }
+
+
+      let stateid=document.getElementById('id_state').value
+      Window.onload = changeState(stateid);
 
       function naresh_click(flag) {
         console.log(flag,"flag");
@@ -589,6 +1046,11 @@ else{
 }
    
 }
+
+function hello(){
+  console.log("hello")
+}
+
 
     </script>
   </body>
